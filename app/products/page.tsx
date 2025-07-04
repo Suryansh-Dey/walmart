@@ -1,8 +1,9 @@
+import Page1 from "@/components/Page1";
+
 export default function page() {
     return (
         <>
-            <div>Aalo lelo</div>
-            <div>Kande lelo</div>
+            <Page1 />
         </>
     )
 }
