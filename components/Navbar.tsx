@@ -3,6 +3,10 @@ import { useEffect, useState } from "react"
 import { useCartStore } from '@/lib/store'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { addBot, AI } from '@/lib/link.js'
+import { ask_gemini } from "@/lib/chatbot"
+import ReactDOMServer from 'react-dom/server';
+import ProductList from "./ProductList"
 
 export default function Navbar() {
     const [searchQuery, setSearchQuery] = useState('')
@@ -11,10 +15,20 @@ export default function Navbar() {
     const router = useRouter()
 
     useEffect(() => {
+        if (!mounted) {
+            addBot(null, () => {
+                AI.answer = async (query: string, outputBox: HTMLDivElement) => {
+                    const products_json = await ask_gemini(query)
+                    if (products_json === null) {
+                        console.error("Gemini is dhokebaaz")
+                        return
+                    }
+                    const products_list = <ProductList products={products_json} />
+                    outputBox.innerHTML += ReactDOMServer.renderToStaticMarkup(products_list)
+                }
+            })
+        }
         setMounted(true)
-        const addBot = document.createElement('script');
-        addBot.src = "link.js"
-        document.body.appendChild(addBot)
     }, [])
 
     const handleSearch = (e: React.FormEvent) => {
@@ -36,10 +50,10 @@ export default function Navbar() {
                         Walmart
                     </Link>
                     <form onSubmit={handleSearch} className="relative w-full max-w-md">
-                        <input 
-                            type="text" 
-                            placeholder="Search for products..." 
-                            className="w-full py-2 pl-10 pr-4 rounded-full text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-300 transition-all" 
+                        <input
+                            type="text"
+                            placeholder="Search for products..."
+                            className="w-full py-2 pl-10 pr-4 rounded-full text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-300 transition-all"
                             value={searchQuery}
                             onChange={handleInputChange}
                         />
