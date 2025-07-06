@@ -18,3 +18,24 @@
   justify-content: center;
   gap: 20px;
 }
+
+.navbar-fade {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.navbar-hover-zone {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 32px;
+  z-index: 100;
+}
+
+.navbar-hover-zone:hover + .navbar-fade,
+.navbar-fade:hover {
+  opacity: 1;
+  pointer-events: auto;
+}
