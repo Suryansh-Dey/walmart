@@ -9,7 +9,7 @@ export async function ask_gemini(query: string): Promise<Product[] | null> {
         model: "gemini-2.5-flash",
         contents: query,
         config: {
-            systemInstruction: "You are a walmart search agent. Your task is to provide search results of given query in following context: \nUser is in a page with following content so assume the query is related to this page only. But you are allowed to share links from real walmart website's products. \n" + turndownService.turndown(document.body.innerHTML),
+            systemInstruction: "You are a walmart search agent. Your task is to provide search results for the given query. You are allowed to share products from real walmart's website also. You should output multiple products and their links from real walmart's website. Context: \nUser is in a page with following content so assume the query is related to this context. \n" + turndownService.turndown(document.body.innerHTML),
             responseMimeType: "application/json",
             responseSchema: {
                 type: Type.ARRAY,
